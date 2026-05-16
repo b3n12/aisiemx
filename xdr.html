@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="XDR architecture: unified telemetry, detection analytics, and automated response across multiple security layers."/>
+  <meta name="theme-color" content="#0a0e1a"/>
+  <title>XDR Components & Architecture — AISIEMX</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0e1a' width='100' height='100'/><circle cx='50' cy='50' r='28' fill='none' stroke='%2300d9ff' stroke-width='3'/><path d='M 50 22 L 50 78 M 22 50 L 78 50' stroke='%23a855f7' stroke-width='2' stroke-linecap='round'/></svg>"/>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">◆ AISIEMX</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="siem.html">SIEM</a>
+      <a href="xdr.html" aria-current="page">XDR</a>
+      <a href="soar.html">SOAR</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="kicker">🛡️ Architecture</div>
+    <h1>XDR: Extended Detection and Response</h1>
+  </header>
+
+  <main>
+    <section style="text-align: center; margin: 3rem 0 4rem;">
+      <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" style="max-width: 600px; margin: 0 auto; display: block;">
+        <!-- Background -->
+        <defs>
+          <linearGradient id="xdr-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(0,217,255,0.1);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:rgba(168,85,247,0.1);stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="600" height="300" fill="url(#xdr-grad)" rx="8"/>
+
+        <!-- Top row: multiple telemetry sources -->
+        <g id="sources">
+          <!-- Endpoints -->
+          <circle cx="80" cy="60" r="20" fill="none" stroke="#00d9ff" stroke-width="2"/>
+          <text x="80" y="65" font-size="24" fill="#00d9ff" text-anchor="middle">💻</text>
+
+          <!-- Network -->
+          <circle cx="200" cy="40" r="20" fill="none" stroke="#00d9ff" stroke-width="2"/>
+          <text x="200" y="45" font-size="24" fill="#00d9ff" text-anchor="middle">🌐</text>
+
+          <!-- Cloud -->
+          <circle cx="320" cy="55" r="20" fill="none" stroke="#00d9ff" stroke-width="2"/>
+          <text x="320" y="60" font-size="24" fill="#00d9ff" text-anchor="middle">☁️</text>
+
+          <!-- Email -->
+          <circle cx="440" cy="50" r="20" fill="none" stroke="#00d9ff" stroke-width="2"/>
+          <text x="440" y="55" font-size="24" fill="#00d9ff" text-anchor="middle">📧</text>
+
+          <!-- Identity -->
+          <circle cx="540" cy="70" r="20" fill="none" stroke="#00d9ff" stroke-width="2"/>
+          <text x="540" y="75" font-size="24" fill="#00d9ff" text-anchor="middle">👤</text>
+        </g>
+
+        <!-- Converging paths -->
+        <path d="M 80 80 Q 150 130 210 160" stroke="#00d9ff" stroke-width="2" fill="none" opacity="0.6"/>
+        <path d="M 200 60 L 210 160" stroke="#00d9ff" stroke-width="2" fill="none" opacity="0.6"/>
+        <path d="M 320 75 L 210 160" stroke="#00d9ff" stroke-width="2" fill="none" opacity="0.6"/>
+        <path d="M 440 70 Q 360 130 210 160" stroke="#00d9ff" stroke-width="2" fill="none" opacity="0.6"/>
+        <path d="M 540 90 Q 400 140 210 160" stroke="#00d9ff" stroke-width="2" fill="none" opacity="0.6"/>
+
+        <!-- Center: Unified detection -->
+        <circle cx="210" cy="160" r="30" fill="none" stroke="#a855f7" stroke-width="2.5"/>
+        <text x="210" y="165" font-size="22" fill="#a855f7" text-anchor="middle">🎯</text>
+
+        <!-- Output: Response -->
+        <g id="response">
+          <!-- Isolate -->
+          <rect x="80" y="230" width="50" height="40" rx="4" fill="rgba(0,217,255,0.1)" stroke="#00d9ff" stroke-width="2"/>
+          <text x="105" y="255" font-size="12" fill="#00d9ff" text-anchor="middle">Isolate</text>
+
+          <!-- Block -->
+          <rect x="175" y="230" width="50" height="40" rx="4" fill="rgba(168,85,247,0.1)" stroke="#a855f7" stroke-width="2"/>
+          <text x="200" y="255" font-size="12" fill="#a855f7" text-anchor="middle">Block</text>
+
+          <!-- Alert -->
+          <rect x="270" y="230" width="50" height="40" rx="4" fill="rgba(0,217,255,0.1)" stroke="#00d9ff" stroke-width="2"/>
+          <text x="295" y="255" font-size="12" fill="#00d9ff" text-anchor="middle">Alert</text>
+
+          <!-- Remediate -->
+          <rect x="365" y="230" width="70" height="40" rx="4" fill="rgba(168,85,247,0.1)" stroke="#a855f7" stroke-width="2"/>
+          <text x="400" y="255" font-size="12" fill="#a855f7" text-anchor="middle">Remediate</text>
+        </g>
+
+        <!-- Arrows from detection to responses -->
+        <path d="M 185 185 L 105 230" stroke="#00d9ff" stroke-width="1.5" fill="none"/>
+        <path d="M 200 188 L 200 230" stroke="#a855f7" stroke-width="1.5" fill="none"/>
+        <path d="M 210 188 L 295 230" stroke="#00d9ff" stroke-width="1.5" fill="none"/>
+        <path d="M 230 185 L 400 230" stroke="#a855f7" stroke-width="1.5" fill="none"/>
+
+        <!-- Label -->
+        <text x="300" y="290" font-size="13" fill="#94a3b8" text-anchor="middle" font-family="monospace">Multi-layer Telemetry • Correlation • Automated Response</text>
+      </svg>
+    </section>
+
+    <section>
+      <h2>🔧 Core XDR Components</h2>
+      <ul>
+        <li><strong>Unified Telemetry Collection:</strong> Aggregates signals from endpoints, networks, email, cloud workloads, and identities. Supports agent-based, agentless, and API-based telemetry capture.</li>
+        <li><strong>Detection Analytics Engine:</strong> Applies statistical, behavioral, and heuristic models to identify anomalies, malware, and adversary techniques using layered detection logic.</li>
+        <li><strong>Threat Intelligence Integration:</strong> Enriches telemetry with threat intel feeds (STIX/TAXII, commercial, and open source) to identify IOC matches and contextualize threats.</li>
+        <li><strong>Cross-domain Correlation:</strong> Links events across different layers (e.g., endpoint file drop → lateral movement → exfiltration) using temporal, entity-based, and causal mapping.</li>
+        <li><strong>Automated Response Framework:</strong> Executes remediation actions (e.g., isolate endpoint, block IP) based on confidence scores and playbook rules.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>📐 Architecture Diagram</h2>
+      <div class="diagram">
+        <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+          <!-- Telemetry sources -->
+          <text x="60" y="30" class="dg-label-sm" text-anchor="start">TELEMETRY SOURCES</text>
+
+          <rect x="20" y="45" width="70" height="45" rx="4" class="dg-box"/>
+          <text x="55" y="73" class="dg-label" text-anchor="middle">Endpoints</text>
+
+          <rect x="110" y="45" width="70" height="45" rx="4" class="dg-box"/>
+          <text x="145" y="73" class="dg-label" text-anchor="middle">Network</text>
+
+          <rect x="200" y="45" width="70" height="45" rx="4" class="dg-box"/>
+          <text x="235" y="73" class="dg-label" text-anchor="middle">Email</text>
+
+          <rect x="290" y="45" width="70" height="45" rx="4" class="dg-box"/>
+          <text x="325" y="73" class="dg-label" text-anchor="middle">Cloud</text>
+
+          <rect x="380" y="45" width="70" height="45" rx="4" class="dg-box"/>
+          <text x="415" y="73" class="dg-label" text-anchor="middle">Identity</text>
+
+          <!-- Collection arrows -->
+          <path d="M 55 90 L 90 125" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 145 90 L 140 125" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 235 90 L 190 125" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 325 90 L 240 125" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 415 90 L 290 125" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <!-- Unified collection -->
+          <rect x="40" y="125" width="280" height="50" rx="6" class="dg-box-cyan"/>
+          <text x="180" y="156" class="dg-label" text-anchor="middle">Unified Telemetry Collection</text>
+
+          <path d="M 180 175 L 180 215" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <!-- Threat Intel -->
+          <rect x="480" y="45" width="160" height="70" rx="6" class="dg-box"/>
+          <text x="560" y="73" class="dg-label" text-anchor="middle">Threat Intelligence</text>
+          <text x="560" y="93" class="dg-label-sm" text-anchor="middle">Feeds &amp; IOC Enrichment</text>
+
+          <path d="M 480 110 L 320 180" class="dg-arrow-v" marker-end="url(#arrowhead-v)" stroke-dasharray="4,4"/>
+
+          <!-- Detection engine -->
+          <rect x="60" y="215" width="240" height="55" rx="6" class="dg-box-cyan"/>
+          <text x="180" y="240" class="dg-label" text-anchor="middle">Detection Analytics Engine</text>
+          <text x="180" y="258" class="dg-label-sm" text-anchor="middle">Statistical • Behavioral • Heuristic</text>
+
+          <path d="M 180 270 L 180 310" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <!-- Cross-domain correlation -->
+          <rect x="20" y="310" width="320" height="55" rx="6" class="dg-box"/>
+          <text x="180" y="335" class="dg-label" text-anchor="middle">Cross-Domain Correlation</text>
+          <text x="180" y="353" class="dg-label-sm" text-anchor="middle">Temporal • Entity-based • Causal Mapping</text>
+
+          <!-- Split to visualization and response -->
+          <path d="M 100 365 L 50 405" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 260 365 L 310 405" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <!-- Visualization -->
+          <rect x="10" y="405" width="80" height="50" rx="6" class="dg-box-violet"/>
+          <text x="50" y="430" class="dg-label" text-anchor="middle">Incident</text>
+          <text x="50" y="448" class="dg-label" text-anchor="middle">Console</text>
+
+          <!-- Automated Response -->
+          <rect x="260" y="405" width="100" height="50" rx="6" class="dg-box-violet"/>
+          <text x="310" y="425" class="dg-label" text-anchor="middle">Automated</text>
+          <text x="310" y="443" class="dg-label" text-anchor="middle">Response</text>
+
+          <!-- Technical components on right -->
+          <text x="500" y="30" class="dg-label-sm" text-anchor="start">TECHNOLOGY LAYER</text>
+
+          <rect x="480" y="175" width="85" height="50" rx="6" class="dg-box"/>
+          <text x="522" y="200" class="dg-label" text-anchor="middle">eBPF /</text>
+          <text x="522" y="218" class="dg-label" text-anchor="middle">Kernel</text>
+
+          <rect x="580" y="175" width="85" height="50" rx="6" class="dg-box"/>
+          <text x="622" y="200" class="dg-label" text-anchor="middle">Data</text>
+          <text x="622" y="218" class="dg-label" text-anchor="middle">Lake</text>
+
+          <rect x="680" y="175" width="85" height="50" rx="6" class="dg-box"/>
+          <text x="722" y="200" class="dg-label" text-anchor="middle">ML</text>
+          <text x="722" y="218" class="dg-label" text-anchor="middle">Pipeline</text>
+
+          <path d="M 522 225 L 450 310" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+          <path d="M 622 225 L 560 310" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+          <path d="M 722 225 L 670 310" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+
+          <!-- Graph analytics -->
+          <rect x="480" y="310" width="200" height="50" rx="6" class="dg-box"/>
+          <text x="580" y="338" class="dg-label" text-anchor="middle">Graph Analytics Engine</text>
+
+          <path d="M 580 360 L 520 395" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+
+          <!-- Remediation actions -->
+          <rect x="480" y="405" width="170" height="50" rx="6" class="dg-box-violet"/>
+          <text x="565" y="425" class="dg-label" text-anchor="middle">Remediation Actions</text>
+          <text x="565" y="443" class="dg-label-sm" text-anchor="middle">Isolate • Block • Quarantine</text>
+
+          <!-- Arrow markers -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+              <polygon points="0 0, 10 3, 0 6" fill="#00d9ff"/>
+            </marker>
+            <marker id="arrowhead-v" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+              <polygon points="0 0, 10 3, 0 6" fill="#a855f7"/>
+            </marker>
+          </defs>
+        </svg>
+        <div class="diagram-caption">XDR unified architecture: multi-layer telemetry → correlation → detection → automated response</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>🛠️ Technical Stack</h2>
+      <ul>
+        <li><strong>Endpoint Detection Modules:</strong> Kernel-level agents (e.g., eBPF, sysmon) collect process, file, and memory activity for real-time analysis.</li>
+        <li><strong>Cloud-native APIs:</strong> Integrates with platforms like AWS GuardDuty, Azure Defender, GCP SCC for cloud event ingestion.</li>
+        <li><strong>Security Data Lake:</strong> Uses distributed columnar databases or object storage (e.g., Snowflake, S3) to store raw telemetry for long-term querying.</li>
+        <li><strong>Graph Analytics Engines:</strong> Used to model relationships between entities (users, hosts, IPs) and detect suspicious graph patterns or chokepoints.</li>
+        <li><strong>ML Pipelines:</strong> Includes feature engineering, supervised/unsupervised learning models to continuously adapt to novel threats.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <a href="index.html" class="back-link">← Back to Home</a>
+    <p>&copy; 2025 AISIEMX</p>
+  </footer>
+</body>
+</html>

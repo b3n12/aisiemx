@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="SIEM architecture: log ingestion, parsing, correlation, and forensics."/>
+  <meta name="theme-color" content="#0a0e1a"/>
+  <title>SIEM Components & Architecture — AISIEMX</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0e1a' width='100' height='100'/><circle cx='50' cy='50' r='28' fill='none' stroke='%2300d9ff' stroke-width='3'/><path d='M 50 22 L 50 78 M 22 50 L 78 50' stroke='%23a855f7' stroke-width='2' stroke-linecap='round'/></svg>"/>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">◆ AISIEMX</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="siem.html" aria-current="page">SIEM</a>
+      <a href="xdr.html">XDR</a>
+      <a href="soar.html">SOAR</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="kicker">🔍 Architecture</div>
+    <h1>SIEM: Security Information and Event Management</h1>
+  </header>
+
+  <main>
+    <section style="text-align: center; margin: 3rem 0 4rem;">
+      <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" style="max-width: 600px; margin: 0 auto; display: block;">
+        <!-- Background -->
+        <defs>
+          <linearGradient id="siem-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(0,217,255,0.1);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:rgba(168,85,247,0.1);stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="600" height="300" fill="url(#siem-grad)" rx="8"/>
+
+        <!-- Left: Log sources -->
+        <g id="logs">
+          <rect x="30" y="80" width="40" height="40" rx="4" fill="none" stroke="#00d9ff" stroke-width="2"/>
+          <text x="50" y="105" font-size="20" fill="#00d9ff" text-anchor="middle">📄</text>
+
+          <rect x="30" y="140" width="40" height="40" rx="4" fill="none" stroke="#00d9ff" stroke-width="2"/>
+          <text x="50" y="165" font-size="20" fill="#00d9ff" text-anchor="middle">⚙️</text>
+
+          <rect x="30" y="200" width="40" height="40" rx="4" fill="none" stroke="#00d9ff" stroke-width="2"/>
+          <text x="50" y="225" font-size="20" fill="#00d9ff" text-anchor="middle">🌐</text>
+        </g>
+
+        <!-- Arrows flowing right -->
+        <path d="M 70 100 L 120 100" stroke="#00d9ff" stroke-width="2" fill="none" marker-end="url(#arrow-cyan)"/>
+        <path d="M 70 160 L 120 160" stroke="#00d9ff" stroke-width="2" fill="none" marker-end="url(#arrow-cyan)"/>
+        <path d="M 70 220 L 120 220" stroke="#00d9ff" stroke-width="2" fill="none" marker-end="url(#arrow-cyan)"/>
+
+        <!-- Center: Processing (central hub) -->
+        <circle cx="210" cy="150" r="35" fill="none" stroke="#a855f7" stroke-width="2"/>
+        <text x="210" y="155" font-size="24" fill="#a855f7" text-anchor="middle">⚡</text>
+
+        <!-- Connecting lines from sources to hub -->
+        <path d="M 120 100 L 175 130" stroke="#00d9ff" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <path d="M 120 160 L 175 160" stroke="#00d9ff" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <path d="M 120 220 L 175 190" stroke="#00d9ff" stroke-width="1.5" fill="none" opacity="0.6"/>
+
+        <!-- Right: Output destinations -->
+        <g id="outputs">
+          <!-- Alerts -->
+          <rect x="330" y="80" width="40" height="40" rx="4" fill="none" stroke="#a855f7" stroke-width="2"/>
+          <text x="350" y="105" font-size="20" fill="#a855f7" text-anchor="middle">🚨</text>
+
+          <!-- Dashboard -->
+          <rect x="330" y="140" width="40" height="40" rx="4" fill="none" stroke="#a855f7" stroke-width="2"/>
+          <text x="350" y="165" font-size="20" fill="#a855f7" text-anchor="middle">📊</text>
+
+          <!-- Storage -->
+          <rect x="330" y="200" width="40" height="40" rx="4" fill="none" stroke="#a855f7" stroke-width="2"/>
+          <text x="350" y="225" font-size="20" fill="#a855f7" text-anchor="middle">💾</text>
+        </g>
+
+        <!-- Arrows from hub to outputs -->
+        <path d="M 245 130 L 330 100" stroke="#a855f7" stroke-width="2" fill="none" marker-end="url(#arrow-violet)"/>
+        <path d="M 245 150 L 330 160" stroke="#a855f7" stroke-width="2" fill="none" marker-end="url(#arrow-violet)"/>
+        <path d="M 245 170 L 330 220" stroke="#a855f7" stroke-width="2" fill="none" marker-end="url(#arrow-violet)"/>
+
+        <!-- Labels -->
+        <text x="210" y="280" font-size="13" fill="#94a3b8" text-anchor="middle" font-family="monospace">Log Collection • Correlation • Response</text>
+
+        <!-- Arrow markers -->
+        <defs>
+          <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <polygon points="0 0, 10 3, 0 6" fill="#00d9ff"/>
+          </marker>
+          <marker id="arrow-violet" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <polygon points="0 0, 10 3, 0 6" fill="#a855f7"/>
+          </marker>
+        </defs>
+      </svg>
+    </section>
+
+    <section>
+      <h2>🔧 Core SIEM Components</h2>
+      <ul>
+        <li><strong>Log Ingestion:</strong> Centralized collection of logs using agents or agentless protocols (e.g., syslog, WMI, REST APIs) from diverse sources like firewalls, IDS/IPS, operating systems, and cloud services.</li>
+        <li><strong>Parsing &amp; Normalization:</strong> Converts raw log data into structured formats using custom parsers, regex, or vendor-defined schemas, enabling consistent search and analysis.</li>
+        <li><strong>Correlation Engine:</strong> Rule- and behavior-based correlation of normalized events to identify suspicious patterns, lateral movement, or multi-stage attacks.</li>
+        <li><strong>Use Case Framework:</strong> Modular library of security use cases (e.g., brute force detection, privilege escalation) aligned with frameworks like MITRE ATT&CK.</li>
+        <li><strong>Alerting &amp; Dashboards:</strong> Real-time alerts delivered via email, SMS, ticketing systems; customizable dashboards using widgets, threat maps, and KPIs.</li>
+        <li><strong>Retention &amp; Forensics:</strong> Long-term log storage for compliance (e.g., GDPR, HIPAA) and forensic analysis. Supports cold/hot storage and legal hold tagging.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>📐 Architecture Diagram</h2>
+      <div class="diagram">
+        <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+          <!-- Sources layer -->
+          <text x="60" y="30" class="dg-label-sm" text-anchor="start">DATA SOURCES</text>
+          <rect x="20" y="45" width="70" height="45" rx="4" class="dg-box"/>
+          <text x="55" y="73" class="dg-label" text-anchor="middle">Firewall</text>
+
+          <rect x="110" y="45" width="70" height="45" rx="4" class="dg-box"/>
+          <text x="145" y="73" class="dg-label" text-anchor="middle">IDS/IPS</text>
+
+          <rect x="200" y="45" width="70" height="45" rx="4" class="dg-box"/>
+          <text x="235" y="73" class="dg-label" text-anchor="middle">Servers</text>
+
+          <rect x="290" y="45" width="70" height="45" rx="4" class="dg-box"/>
+          <text x="325" y="73" class="dg-label" text-anchor="middle">Apps</text>
+
+          <rect x="380" y="45" width="70" height="45" rx="4" class="dg-box"/>
+          <text x="415" y="73" class="dg-label" text-anchor="middle">Cloud</text>
+
+          <!-- Ingestion arrows -->
+          <path d="M 55 90 L 90 125" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 145 90 L 140 125" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 235 90 L 190 125" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 325 90 L 240 125" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 415 90 L 290 125" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <!-- Log Ingestion box -->
+          <rect x="40" y="125" width="280" height="50" rx="6" class="dg-box-cyan"/>
+          <text x="180" y="156" class="dg-label" text-anchor="middle">Log Ingestion &amp; Collection</text>
+
+          <!-- Arrow down -->
+          <path d="M 180 175 L 180 215" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <!-- Processing pipeline -->
+          <rect x="80" y="215" width="200" height="50" rx="6" class="dg-box"/>
+          <text x="180" y="248" class="dg-label" text-anchor="middle">Parsing &amp; Normalization</text>
+
+          <path d="M 180 265 L 180 305" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <rect x="70" y="305" width="220" height="50" rx="6" class="dg-box"/>
+          <text x="180" y="338" class="dg-label" text-anchor="middle">Correlation Engine</text>
+
+          <!-- Split to storage and alerting -->
+          <path d="M 130 355 L 80 395" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 230 355 L 280 395" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <!-- Storage -->
+          <rect x="20" y="395" width="120" height="50" rx="6" class="dg-box-violet"/>
+          <text x="80" y="420" class="dg-label" text-anchor="middle">Data Lake /</text>
+          <text x="80" y="438" class="dg-label" text-anchor="middle">Retention</text>
+
+          <!-- Alerting &amp; Dashboards -->
+          <rect x="220" y="395" width="140" height="50" rx="6" class="dg-box-violet"/>
+          <text x="290" y="420" class="dg-label" text-anchor="middle">Alerting &amp;</text>
+          <text x="290" y="438" class="dg-label" text-anchor="middle">Dashboards</text>
+
+          <!-- Technical stack on right -->
+          <text x="500" y="30" class="dg-label-sm" text-anchor="start">TECHNICAL STACK</text>
+
+          <rect x="480" y="45" width="85" height="45" rx="4" class="dg-box"/>
+          <text x="522" y="73" class="dg-label" text-anchor="middle">Kafka</text>
+
+          <rect x="580" y="45" width="85" height="45" rx="4" class="dg-box"/>
+          <text x="622" y="73" class="dg-label" text-anchor="middle">Logstash</text>
+
+          <rect x="680" y="45" width="85" height="45" rx="4" class="dg-box"/>
+          <text x="722" y="73" class="dg-label" text-anchor="middle">Elasticsearch</text>
+
+          <path d="M 522 90 L 520 125" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+          <path d="M 622 90 L 620 125" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+          <path d="M 722 90 L 720 125" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+
+          <rect x="480" y="125" width="85" height="50" rx="6" class="dg-box"/>
+          <text x="522" y="153" class="dg-label" text-anchor="middle">Event</text>
+          <text x="522" y="168" class="dg-label" text-anchor="middle">Streaming</text>
+
+          <rect x="580" y="125" width="85" height="50" rx="6" class="dg-box"/>
+          <text x="622" y="153" class="dg-label" text-anchor="middle">Log</text>
+          <text x="622" y="168" class="dg-label" text-anchor="middle">Processing</text>
+
+          <rect x="680" y="125" width="85" height="50" rx="6" class="dg-box"/>
+          <text x="722" y="153" class="dg-label" text-anchor="middle">Search &amp;</text>
+          <text x="722" y="168" class="dg-label" text-anchor="middle">Index</text>
+
+          <!-- Data flow to pipeline -->
+          <path d="M 520 175 L 400 240" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+
+          <!-- Use case rules -->
+          <rect x="480" y="215" width="200" height="50" rx="6" class="dg-box-cyan"/>
+          <text x="580" y="248" class="dg-label" text-anchor="middle">Use Case Rules &amp; Detection</text>
+
+          <path d="M 580 265 L 580 305" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+
+          <!-- Forensics -->
+          <rect x="480" y="305" width="200" height="50" rx="6" class="dg-box-violet"/>
+          <text x="580" y="338" class="dg-label" text-anchor="middle">Forensic Analysis &amp;</text>
+          <text x="580" y="356" class="dg-label" text-anchor="middle">Compliance Reporting</text>
+
+          <!-- Arrow markers -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+              <polygon points="0 0, 10 3, 0 6" fill="#00d9ff"/>
+            </marker>
+            <marker id="arrowhead-v" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+              <polygon points="0 0, 10 3, 0 6" fill="#a855f7"/>
+            </marker>
+          </defs>
+        </svg>
+        <div class="diagram-caption">Typical SIEM data flow: collection → normalization → correlation → detection &amp; storage</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>🛠️ Technical Stack</h2>
+      <ul>
+        <li><strong>Apache Kafka:</strong> Distributed event streaming platform used to buffer high-throughput log data before processing, ensuring decoupling of producers/consumers.</li>
+        <li><strong>Logstash/Fluentd:</strong> Open-source data processing pipelines for log ingestion, transformation, and routing into storage/indexing systems.</li>
+        <li><strong>Apache Solr / Elasticsearch:</strong> Search engines used to index logs for real-time querying with full-text search, aggregations, and custom queries.</li>
+        <li><strong>Hadoop HDFS:</strong> Distributed file system to store petabytes of historical logs for compliance and forensic retrieval, supports batch processing with MapReduce or Spark.</li>
+        <li><strong>Apache Spark:</strong> In-memory distributed computation engine used for real-time analytics, machine learning, and log enrichment.</li>
+        <li><strong>Security Data Lake:</strong> Centralized log repository aggregating structured and unstructured data from security telemetry for advanced analytics and AI/ML applications.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <a href="index.html" class="back-link">← Back to Home</a>
+    <p>&copy; 2025 AISIEMX</p>
+  </footer>
+</body>
+</html>

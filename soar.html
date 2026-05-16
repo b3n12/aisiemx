@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="SOAR architecture: security orchestration, automation, case management, and incident response."/>
+  <meta name="theme-color" content="#0a0e1a"/>
+  <title>SOAR Components & Architecture — AISIEMX</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0e1a' width='100' height='100'/><circle cx='50' cy='50' r='28' fill='none' stroke='%2300d9ff' stroke-width='3'/><path d='M 50 22 L 50 78 M 22 50 L 78 50' stroke='%23a855f7' stroke-width='2' stroke-linecap='round'/></svg>"/>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">◆ AISIEMX</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="siem.html">SIEM</a>
+      <a href="xdr.html">XDR</a>
+      <a href="soar.html" aria-current="page">SOAR</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="kicker">⚙️ Architecture</div>
+    <h1>SOAR: Security Orchestration, Automation and Response</h1>
+  </header>
+
+  <main>
+    <section style="text-align: center; margin: 3rem 0 4rem;">
+      <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" style="max-width: 600px; margin: 0 auto; display: block;">
+        <!-- Background -->
+        <defs>
+          <linearGradient id="soar-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(0,217,255,0.1);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:rgba(168,85,247,0.1);stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="600" height="300" fill="url(#soar-grad)" rx="8"/>
+
+        <!-- Left: Incident intake -->
+        <circle cx="60" cy="150" r="25" fill="none" stroke="#00d9ff" stroke-width="2"/>
+        <text x="60" y="156" font-size="22" fill="#00d9ff" text-anchor="middle">📥</text>
+        <text x="60" y="185" font-size="11" fill="#94a3b8" text-anchor="middle">Incident</text>
+
+        <!-- Arrow to playbook -->
+        <path d="M 85 150 L 130 150" stroke="#00d9ff" stroke-width="2" fill="none" marker-end="url(#arrow-cyan)"/>
+
+        <!-- Center: Playbook -->
+        <rect x="130" y="115" width="80" height="70" rx="6" fill="rgba(168,85,247,0.15)" stroke="#a855f7" stroke-width="2.5"/>
+        <text x="170" y="145" font-size="20" fill="#a855f7" text-anchor="middle">⚙️</text>
+        <text x="170" y="165" font-size="11" fill="#a855f7" text-anchor="middle">Playbook</text>
+
+        <!-- Decision branches -->
+        <!-- Left branch: Approval -->
+        <path d="M 130 140 L 90 100" stroke="#a855f7" stroke-width="1.5" fill="none"/>
+        <circle cx="70" cy="80" r="18" fill="none" stroke="#a855f7" stroke-width="2"/>
+        <text x="70" y="85" font-size="16" fill="#a855f7" text-anchor="middle">👨‍💼</text>
+        <text x="70" y="100" font-size="10" fill="#94a3b8" text-anchor="middle">Approval</text>
+
+        <!-- Center branch: Enrichment -->
+        <path d="M 170 115 L 170 60" stroke="#00d9ff" stroke-width="1.5" fill="none"/>
+        <rect x="140" y="35" width="60" height="35" rx="4" fill="rgba(0,217,255,0.1)" stroke="#00d9ff" stroke-width="2"/>
+        <text x="170" y="58" font-size="11" fill="#00d9ff" text-anchor="middle">Enrichment</text>
+
+        <!-- Right branch: Integration -->
+        <path d="M 210 140 L 250 100" stroke="#a855f7" stroke-width="1.5" fill="none"/>
+        <circle cx="270" cy="80" r="18" fill="none" stroke="#a855f7" stroke-width="2"/>
+        <text x="270" y="85" font-size="16" fill="#a855f7" text-anchor="middle">🔗</text>
+        <text x="270" y="100" font-size="10" fill="#94a3b8" text-anchor="middle">Integration</text>
+
+        <!-- Right: Case management & Actions -->
+        <path d="M 210 150 L 260 150" stroke="#a855f7" stroke-width="2" fill="none" marker-end="url(#arrow-violet)"/>
+
+        <g id="actions">
+          <!-- Case -->
+          <rect x="260" y="130" width="50" height="40" rx="4" fill="none" stroke="#00d9ff" stroke-width="2"/>
+          <text x="285" y="150" font-size="18" fill="#00d9ff" text-anchor="middle">📋</text>
+
+          <!-- Auto Action -->
+          <rect x="330" y="130" width="50" height="40" rx="4" fill="none" stroke="#a855f7" stroke-width="2"/>
+          <text x="355" y="150" font-size="18" fill="#a855f7" text-anchor="middle">⚡</text>
+
+          <!-- Integration -->
+          <rect x="400" y="130" width="50" height="40" rx="4" fill="none" stroke="#00d9ff" stroke-width="2"/>
+          <text x="425" y="150" font-size="18" fill="#00d9ff" text-anchor="middle">🔧</text>
+        </g>
+
+        <!-- Feedback loop -->
+        <path d="M 425 170 Q 300 220 170 185" stroke="#a855f7" stroke-width="1.5" fill="none" stroke-dasharray="4,4" opacity="0.6"/>
+        <text x="300" y="210" font-size="10" fill="#a855f7" text-anchor="middle">Feedback &amp; Refinement</text>
+
+        <!-- Bottom label -->
+        <text x="300" y="280" font-size="13" fill="#94a3b8" text-anchor="middle" font-family="monospace">Intake • Enrichment • Decision • Automation • Response</text>
+
+        <!-- Arrow markers -->
+        <defs>
+          <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <polygon points="0 0, 10 3, 0 6" fill="#00d9ff"/>
+          </marker>
+          <marker id="arrow-violet" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <polygon points="0 0, 10 3, 0 6" fill="#a855f7"/>
+          </marker>
+        </defs>
+      </svg>
+    </section>
+
+    <section>
+      <h2>🔧 Core SOAR Components</h2>
+      <ul>
+        <li><strong>Playbook Designer:</strong> Graphical or code-based workflow builders that define step-by-step response actions. Supports branching logic, variables, conditions, and triggers.</li>
+        <li><strong>Case Management System:</strong> Tracks incident lifecycle with analyst notes, task assignment, SLA tracking, and integration with ticketing systems (e.g., Jira, ServiceNow).</li>
+        <li><strong>Integration Hub:</strong> REST-based connectors for SIEMs, firewalls, EDRs, cloud APIs, threat intelligence feeds, allowing orchestration of actions across multiple platforms.</li>
+        <li><strong>Incident Enrichment:</strong> Pulls additional data from external sources (e.g., WHOIS, GeoIP, sandbox analysis) to improve triage and contextual decisions.</li>
+        <li><strong>Approval &amp; Escalation Engine:</strong> Enables multi-tiered workflows with human-in-the-loop actions, escalation to SOC managers, and audit trails.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>📐 Architecture Diagram</h2>
+      <div class="diagram">
+        <svg viewBox="0 0 900 580" xmlns="http://www.w3.org/2000/svg">
+          <!-- Incident sources -->
+          <text x="60" y="30" class="dg-label-sm" text-anchor="start">INCIDENT SOURCES</text>
+
+          <rect x="20" y="45" width="65" height="45" rx="4" class="dg-box"/>
+          <text x="52" y="73" class="dg-label" text-anchor="middle">SIEM</text>
+
+          <rect x="105" y="45" width="65" height="45" rx="4" class="dg-box"/>
+          <text x="137" y="73" class="dg-label" text-anchor="middle">XDR</text>
+
+          <rect x="190" y="45" width="65" height="45" rx="4" class="dg-box"/>
+          <text x="222" y="73" class="dg-label" text-anchor="middle">EDR</text>
+
+          <rect x="275" y="45" width="65" height="45" rx="4" class="dg-box"/>
+          <text x="307" y="73" class="dg-label" text-anchor="middle">TI</text>
+
+          <rect x="360" y="45" width="65" height="45" rx="4" class="dg-box"/>
+          <text x="392" y="73" class="dg-label" text-anchor="middle">API</text>
+
+          <!-- Ingestion arrows -->
+          <path d="M 52 90 L 90 135" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 137 90 L 130 135" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 222 90 L 175 135" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 307 90 L 260 135" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 392 90 L 330 135" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <!-- Event intake -->
+          <rect x="40" y="135" width="300" height="50" rx="6" class="dg-box-cyan"/>
+          <text x="190" y="166" class="dg-label" text-anchor="middle">Event Intake &amp; Triage</text>
+
+          <path d="M 190 185 L 190 225" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <!-- Enrichment -->
+          <rect x="50" y="225" width="280" height="55" rx="6" class="dg-box"/>
+          <text x="190" y="250" class="dg-label" text-anchor="middle">Incident Enrichment</text>
+          <text x="190" y="268" class="dg-label-sm" text-anchor="middle">WHOIS • GeoIP • Sandbox • Context</text>
+
+          <!-- External sources -->
+          <rect x="480" y="225" width="140" height="70" rx="6" class="dg-box"/>
+          <text x="550" y="250" class="dg-label" text-anchor="middle">External Data</text>
+          <text x="550" y="268" class="dg-label-sm" text-anchor="middle">Sources &amp; APIs</text>
+
+          <path d="M 480 260 L 330 255" class="dg-arrow-v" marker-end="url(#arrowhead-v)" stroke-dasharray="4,4"/>
+
+          <!-- Case management -->
+          <path d="M 190 280 L 190 320" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <rect x="30" y="320" width="320" height="60" rx="6" class="dg-box-cyan"/>
+          <text x="190" y="345" class="dg-label" text-anchor="middle">Case Management System</text>
+          <text x="190" y="363" class="dg-label-sm" text-anchor="middle">Lifecycle • Assignments • SLA Tracking • Audit</text>
+
+          <!-- Playbook engine -->
+          <path d="M 190 380 L 190 420" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <rect x="40" y="420" width="300" height="50" rx="6" class="dg-box"/>
+          <text x="190" y="451" class="dg-label" text-anchor="middle">Playbook Decision Engine</text>
+
+          <!-- Parallel: approval workflow and integration hub -->
+          <path d="M 100 470 L 50 510" class="dg-arrow" marker-end="url(#arrowhead)"/>
+          <path d="M 280 470 L 330 510" class="dg-arrow" marker-end="url(#arrowhead)"/>
+
+          <!-- Approval -->
+          <rect x="10" y="510" width="80" height="50" rx="6" class="dg-box-violet"/>
+          <text x="50" y="530" class="dg-label" text-anchor="middle">Approval</text>
+          <text x="50" y="548" class="dg-label" text-anchor="middle">Escalation</text>
+
+          <!-- Integration Hub -->
+          <rect x="280" y="510" width="100" height="50" rx="6" class="dg-box-violet"/>
+          <text x="330" y="530" class="dg-label" text-anchor="middle">Integration</text>
+          <text x="330" y="548" class="dg-label" text-anchor="middle">Hub</text>
+
+          <!-- Right side: technical stack -->
+          <text x="480" y="30" class="dg-label-sm" text-anchor="start">TECHNICAL COMPONENTS</text>
+
+          <rect x="480" y="45" width="85" height="50" rx="6" class="dg-box"/>
+          <text x="522" y="68" class="dg-label" text-anchor="middle">Python</text>
+          <text x="522" y="86" class="dg-label-sm" text-anchor="middle">Runners</text>
+
+          <rect x="580" y="45" width="85" height="50" rx="6" class="dg-box"/>
+          <text x="622" y="68" class="dg-label" text-anchor="middle">Event</text>
+          <text x="622" y="86" class="dg-label-sm" text-anchor="middle">Bus</text>
+
+          <rect x="680" y="45" width="85" height="50" rx="6" class="dg-box"/>
+          <text x="722" y="68" class="dg-label" text-anchor="middle">NoSQL</text>
+          <text x="722" y="86" class="dg-label-sm" text-anchor="middle">Store</text>
+
+          <path d="M 522 95 L 460 180" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+          <path d="M 622 95 L 520 180" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+          <path d="M 722 95 L 580 180" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+
+          <!-- Connectors -->
+          <rect x="480" y="135" width="200" height="50" rx="6" class="dg-box"/>
+          <text x="580" y="162" class="dg-label" text-anchor="middle">REST Connectors &amp; APIs</text>
+
+          <path d="M 600 185 L 500 320" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+
+          <!-- Front-end UI -->
+          <rect x="480" y="320" width="200" height="50" rx="6" class="dg-box-cyan"/>
+          <text x="580" y="347" class="dg-label" text-anchor="middle">Front-End UI &amp; Dashboards</text>
+
+          <path d="M 600 370 L 550 420" class="dg-arrow-v" marker-end="url(#arrowhead-v)"/>
+
+          <!-- Automation Actions -->
+          <rect x="480" y="420" width="200" height="50" rx="6" class="dg-box-violet"/>
+          <text x="580" y="447" class="dg-label" text-anchor="middle">Automated Actions &amp;</text>
+          <text x="580" y="465" class="dg-label-sm" text-anchor="middle">Remediation</text>
+
+          <!-- Arrow markers -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+              <polygon points="0 0, 10 3, 0 6" fill="#00d9ff"/>
+            </marker>
+            <marker id="arrowhead-v" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+              <polygon points="0 0, 10 3, 0 6" fill="#a855f7"/>
+            </marker>
+          </defs>
+        </svg>
+        <div class="diagram-caption">SOAR workflow: incident intake → enrichment → case management → playbook execution → automated actions</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>🛠️ Technical Stack</h2>
+      <ul>
+        <li><strong>Python Automation Runners:</strong> Executes custom scripts securely in isolated environments. Supports async jobs, logging, and rollback logic.</li>
+        <li><strong>Event Bus (e.g., RabbitMQ, Redis Streams):</strong> Manages real-time workflow orchestration and task distribution across components.</li>
+        <li><strong>NoSQL Document Store (e.g., MongoDB):</strong> Stores incident artifacts, playbook definitions, and case histories.</li>
+        <li><strong>Front-End UI Builders:</strong> React/Angular-based visual interfaces for playbook editing, analyst dashboards, and SOC KPIs.</li>
+        <li><strong>Audit &amp; Compliance Layer:</strong> Tracks every action, including who performed what/when, exportable for regulatory reporting (e.g., PCI-DSS, NIST).</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <a href="index.html" class="back-link">← Back to Home</a>
+    <p>&copy; 2025 AISIEMX</p>
+  </footer>
+</body>
+</html>
